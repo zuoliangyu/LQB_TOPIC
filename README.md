@@ -38,6 +38,7 @@
     │   ├── 嵌入式
     │   └── 物联网
     ├── 16 第十六届
+    │   ├── EDA
     │   ├── FPGA
     │   ├── 单片机
     │   ├── 嵌入式
@@ -56,7 +57,7 @@
         ├── 单片机
         └── 嵌入式
 
-47 directories, 1 file
+48 directories, 1 file
 ```
 <!-- DIRECTORY_TREE_END -->
 
