@@ -1,0 +1,88 @@
+name: 更新README目录树
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 生成目录树
+        id: generate_tree
+        run: |
+          # 创建临时文件存储目录树
+          TREE_FILE=$(mktemp)
+
+          # 生成目录树，排除.git和.github目录
+          echo '```' > "$TREE_FILE"
+          tree -L 3 -I '.git|.github|node_modules|__pycache__|*.pyc' --charset utf-8 >> "$TREE_FILE" 2>/dev/null || {
+            # 如果tree命令不可用，使用find命令生成
+            find . -not -path '*/\.*' -not -path '*/.git/*' -not -path '*/.github/*' \
+              -not -path '*/node_modules/*' -not -path '*/__pycache__/*' \
+              -type d -o -type f | sort | sed 's|^\./||' | \
+              awk -F/ '{
+                depth = NF - 1
+                for (i = 0; i < depth; i++) printf "  "
+                if (NF > 1) printf "├── "
+                print $NF
+              }' >> "$TREE_FILE"
+          }
+          echo '```' >> "$TREE_FILE"
+
+          # 保存到环境变量
+          echo "TREE_CONTENT<<EOF" >> $GITHUB_ENV
+          cat "$TREE_FILE" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: 更新README
+        run: |
+          # 使用awk替换README中的目录树部分
+          awk -v tree="$TREE_CONTENT" '
+            BEGIN { in_tree = 0; printed = 0 }
+            /<!-- DIRECTORY_TREE_START -->/ {
+              print
+              print "<!-- 此部分由 GitHub Actions 自动生成，请勿手动编辑 -->"
+              print tree
+              in_tree = 1
+              printed = 1
+              next
+            }
+            /<!-- DIRECTORY_TREE_END -->/ {
+              in_tree = 0
+              print
+              next
+            }
+            !in_tree { print }
+          ' README.md > README.md.tmp
+
+          mv README.md.tmp README.md
+
+      - name: 检查是否有变更
+        id: check_changes
+        run: |
+          if git diff --quiet README.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 提交变更
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "docs: 自动更新README目录树 [skip ci]"
+          git push

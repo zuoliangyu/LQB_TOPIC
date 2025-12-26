@@ -1,0 +1,39 @@
+# Claude配置文件
+.claude/
+.claude.md
+CLAUDE.md
+
+# 规范工作流配置
+.spec-workflow/
+
+# IDE配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.temp
+*.log
+*.bak
+
+# 编译输出
+*.o
+*.obj
+*.exe
+*.out
+*.hex
+*.bin
+*.elf
+
+# 依赖目录
+node_modules/
+__pycache__/
+*.pyc
