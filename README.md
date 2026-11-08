@@ -11,6 +11,9 @@
 ```
 .
 ├── README.md
+├── scripts
+│   ├── build_site.py
+│   └── index.template.html
 └── 蓝桥杯电子类真题
     ├── 10 第十届
     │   ├── 单片机
@@ -63,7 +66,7 @@
         ├── 单片机
         └── 嵌入式
 
-52 directories, 1 file
+53 directories, 3 files
 ```
 <!-- DIRECTORY_TREE_END -->
 
