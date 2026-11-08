@@ -155,7 +155,7 @@ def build(out: Path):
     side += [f"  * [{year_label(y)}](years/{year_no(y)}.md)" for y in tree]
     side += ["", "* 🧭 按赛道浏览"]
     side += [f"  * [{t}](tracks/{track_slug(t)}.md)" for t in all_tracks]
-    side += ["", "* 🔗 项目链接", f"  * [GitHub 仓库]({REPO_URL})", "  * [左岚的站点导航](https://zuoliangyu.github.io/)", ""]
+    side += ["", "* 🔗 项目链接", f"  * [GitHub 仓库]({REPO_URL})", "  * [左岚的站点导航](https://zuoliangyu.netlify.app/)", ""]
     write(out / "_sidebar.md", "\n".join(side))
 
     updated = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")

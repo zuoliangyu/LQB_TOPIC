@@ -39,10 +39,14 @@
               '⏰ 资料更新：{{UPDATED}}' +
               '</footer>';
           });
-          // PDF 链接后追加「预览」按钮，点击在页内 iframe 展开
+          // 文件链接按 GitHub Pages 地址生成；在 Netlify 等其他域名打开时换成当前站点，
+          // 让 PDF 从同一个站点下载。然后给 PDF 链接追加「预览」按钮，点击在页内 iframe 展开。
+          var PUBLISHED = 'https://zuoliangyu.github.io/LQB_TOPIC/';
+          var SITE = location.origin + location.pathname.replace(/[^/]*$/, '');
           hook.afterEach(function (html) {
+            if (SITE !== PUBLISHED) html = html.split(PUBLISHED).join(SITE);
             return html.replace(
-              /<a\s+href="(https:\/\/zuoliangyu\.github\.io\/LQB_TOPIC\/[^"]+\.pdf)"([^>]*)>([^<]+)<\/a>/gi,
+              /<a\s+href="([^"]+\.pdf)"([^>]*)>([^<]+)<\/a>/gi,
               function (match, url, attrs, title) {
                 var id = 'pdf_' + Math.random().toString(36).substr(2, 8);
                 return '<a href="' + url + '" target="_blank">' + title + '</a> ' +

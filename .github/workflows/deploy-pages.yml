@@ -28,6 +28,16 @@ jobs:
         with:
           path: dist
 
+      # 同一份产物同步到 Netlify（主站）。Netlify 跑在根路径，用 _redirects 把 GitHub Pages
+      # 的 /LQB_TOPIC/ 子路径重写到根下同名文件。
+      - name: 发布到 Netlify
+        run: |
+          echo '/LQB_TOPIC/*  /:splat  200' >> dist/_redirects
+          npx --yes netlify-cli@26 deploy --prod --no-build --dir=dist --message "${{ github.sha }}"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
