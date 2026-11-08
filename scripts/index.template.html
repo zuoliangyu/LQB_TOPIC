@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>蓝桥杯电子类历年真题</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="蓝桥杯大赛电子类（单片机、嵌入式、物联网、EDA、FPGA）历年真题在线浏览">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    .lqb-preview-btn { padding: 2px 10px; font-size: 12px; cursor: pointer; border: 1px solid #42b983; border-radius: 3px; color: #42b983; background: white; vertical-align: middle; }
+    .lqb-preview { display: none; margin-top: 10px; }
+    .lqb-preview iframe { width: 100%; height: 800px; border: 1px solid #ddd; border-radius: 4px; }
+    .markdown-section table { display: table; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="app">加载中...</div>
+  <script>
+    window.$docsify = {
+      name: '蓝桥杯电子类真题',
+      repo: 'https://github.com/zuoliangyu/LQB_TOPIC',
+      loadSidebar: true,
+      subMaxLevel: 0,
+      auto2top: true,
+      search: {
+        placeholder: '搜索',
+        noData: '没有找到结果',
+        depth: 6
+      },
+      plugins: [
+        function (hook) {
+          hook.beforeEach(function (md) {
+            return md + '\n\n----\n\n<footer style="text-align: center; margin-top: 20px; padding: 15px; border-top: 1px solid #eee; color: #666;">' +
+              '蓝桥杯电子类历年真题<br>' +
+              '📝 整理维护：<strong>左岚</strong><br>' +
+              '📺 <a href="https://space.bilibili.com/27619688" target="_blank">哔哩哔哩主页</a> | ' +
+              '🔗 <a href="https://github.com/zuoliangyu/LQB_TOPIC" target="_blank">GitHub 仓库</a><br>' +
+              '⏰ 资料更新：{{UPDATED}}' +
+              '</footer>';
+          });
+          // PDF 链接后追加「预览」按钮，点击在页内 iframe 展开
+          hook.afterEach(function (html) {
+            return html.replace(
+              /<a\s+href="(https:\/\/zuoliangyu\.github\.io\/LQB_TOPIC\/[^"]+\.pdf)"([^>]*)>([^<]+)<\/a>/gi,
+              function (match, url, attrs, title) {
+                var id = 'pdf_' + Math.random().toString(36).substr(2, 8);
+                return '<a href="' + url + '" target="_blank">' + title + '</a> ' +
+                  '<button class="lqb-preview-btn" data-target="' + id + '">预览</button>' +
+                  '<div class="lqb-preview" id="' + id + '"><iframe data-src="' + url + '"></iframe></div>';
+              }
+            );
+          });
+          // iframe 点击预览时才加载，避免一页几十个 PDF 同时下载
+          hook.doneEach(function () {
+            document.querySelectorAll('.lqb-preview-btn').forEach(function (btn) {
+              btn.onclick = function () {
+                var box = document.getElementById(btn.dataset.target);
+                var frame = box.querySelector('iframe');
+                if (!frame.src) frame.src = frame.dataset.src;
+                var open = box.style.display === 'block';
+                box.style.display = open ? 'none' : 'block';
+                btn.textContent = open ? '预览' : '取消预览';
+              };
+            });
+          });
+        }
+      ]
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+</body>
+</html>

@@ -25,6 +25,7 @@ desktop.ini
 *.bak
 
 # 编译输出
+dist/
 *.o
 *.obj
 *.exe

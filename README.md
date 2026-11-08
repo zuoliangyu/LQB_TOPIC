@@ -2,6 +2,8 @@
 
 这个仓库包含了蓝桥杯相关的题目和资料。
 
+🌐 **在线浏览**：https://zuoliangyu.github.io/LQB_TOPIC/ （按届 / 按赛道浏览，PDF 可在页内预览）
+
 ## 📁 项目结构
 
 <!-- DIRECTORY_TREE_START -->
